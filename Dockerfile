@@ -1,5 +1,4 @@
 FROM busybox:ubuntu-14.04
-MAINTAINER Johannes Wuerbach (johannes.wuerbach@googlemail.com)
 
 ENV NEW_RELIC_LICENSE_KEY YOUR_LICENSE_KEY
 ENV CUSTOM_HOSTNAME CUSTOM_HOSTNAME
@@ -15,5 +14,7 @@ RUN mv ./nrsysmond.cfg /etc/ && \
   mv ./scripts/nrsysmond-config /bin && \
   mv ./daemon/nrsysmond.x64 /bin/nrsysmond
 
-CMD nrsysmond-config --set license_key=$NEW_RELIC_LICENSE_KEY && \
-  nrsysmond -c /etc/nrsysmond.cfg -n $CUSTOM_HOSTNAME -d $LOG_LEVEL -l /dev/stdout -f
+RUN chown root:root /bin/nrsysmond
+
+CMD /bin/nrsysmond-config --set license_key=$NEW_RELIC_LICENSE_KEY && \
+  /bin/nrsysmond -c /etc/nrsysmond.cfg -n $CUSTOM_HOSTNAME -d $LOG_LEVEL -l /dev/stdout -f
